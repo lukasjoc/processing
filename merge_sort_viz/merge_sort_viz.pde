@@ -1,18 +1,18 @@
 import java.util.Arrays;
 
-float[] arr;
-
-float[] mergesort(float[] arr) {
+float[] mergesort(float[] arr, int depth) {
   int arrLen = arr.length;
   if (arrLen <= 1) return arr;
+  depth--;
+  if(depth < 1) return arr;
   int mid = arrLen / 2;
   float[] left = Arrays.copyOfRange(arr, 0, mid);
   float[] right = Arrays.copyOfRange(arr, mid, arr.length);
-  left = mergesort(left);
-  right = mergesort(right);
+  left = mergesort(left, depth);
+  right = mergesort(right, depth);
   int j = 0, k = 0;
   for (int i = 0; i < arr.length; i++) {
-      if (j >= left.length) {
+    if (j >= left.length) {
       arr[i] = right[k];
       k++;
       continue;
@@ -31,19 +31,28 @@ float[] mergesort(float[] arr) {
   return arr;
 }
 
+float[] arr;
+int depth = 1;
 void setup() {
   size(840, 600);
   arr = new float[width];
   for(int i = 0; i < arr.length; i++) {
     arr[i] = random(height);
   }
-  arr = mergesort(arr);
+  frameRate(5);
 }
 
 void draw() {
   background(0);
+  arr = mergesort(arr, depth++);
+  if (depth >= arr.length) {
+    noLoop();
+  }
   for(int i = 0; i < arr.length; i++) {
-    stroke(255);
-    line(i, height, i, height - arr[i]);
+    int lineColor = color(arr[i], height, height);
+    stroke(lineColor);
+    fill(lineColor);
+    float location = map(i, 0, arr.length, 0, width);
+    rect(location, height - arr[i], width/500, height);
   }
 }
