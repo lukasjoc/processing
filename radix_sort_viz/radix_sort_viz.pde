@@ -1,18 +1,19 @@
 import java.util.Arrays;
 
 // counter just like the counting sort
-void countByLSE(int[] arr, int n, int expr ) {
-  int output[] = new int[n];
+void countByLSE(int[] arr, int expr ) {
+  int arrLen = arr.length;
+  int output[] = new int[arrLen];
   int i;
   int count[] = new int[10];
   Arrays.fill(count, 0);
-  for (i = 0; i < n; i++) count[(arr[i] / expr) % 10]++;
+  for (i = 0; i < arrLen; i++) count[(arr[i] / expr) % 10]++;
   for (i = 1; i < 10; i++) count[i] += count[i - 1];
-  for (i = n - 1; i >= 0; i--) {
+  for (i = arrLen - 1; i >= 0; i--) {
     output[count[(arr[i] / expr) % 10] - 1] = arr[i];
     count[(arr[i] / expr) % 10]--;
   }
-  for (i = 0; i < n; i++)  arr[i] = output[i];
+  for (i = 0; i < arrLen; i++)  arr[i] = output[i];
 }
 
 // the radix sort
@@ -20,7 +21,7 @@ void radixSort(int[] arr) {
   int m = arr[0];
   for (int i = 1; i < arr.length; i++)
     if (arr[i] > m) m = arr[i];
-  for (int exp = 1; m / exp > 0; exp *= 10) countByLSE(arr, arr.length, exp);
+  for (int exp = 1; m / exp > 0; exp *= 10) countByLSE(arr, exp);
 }
 
 int[] arr;
